@@ -22,6 +22,17 @@ end
 
 group :test do
   gem 'rspec-rails'
+
+end
+
+group :test, :development do
+  gem 'better_errors'
+  gem 'binding_of_caller'
+  gem 'sqlite3'
+  gem 'pry'
+  gem 'pry-nav'
+  gem 'pry-rescue'
+  gem 'pry-stack_explorer'
 end
 
 gem 'jquery-rails'
