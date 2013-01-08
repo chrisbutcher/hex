@@ -7,13 +7,9 @@ class Game
   end
 
   def self.create width, height
-    board_array = []
-    height.times do |row|
-      width.times do |column|
-        board_array << nil
-      end
-    end
-    @game = new(:board => board_array)
+    board_array = [[nil] * width] * height
+
+    @game = new(width, height, board_array)
   end
 
   def save session
@@ -27,6 +23,7 @@ class Game
   def move x, y, color
     @board[y][x] = color
   end
+
 
 
 end
