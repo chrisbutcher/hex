@@ -6,21 +6,60 @@
   <%= javascript_include_tag "application" %>
   <%= csrf_meta_tags %>
 
-   <style type="text/css">
+
+	<link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,900' rel='stylesheet' type='text/css'>
+
+   	<style type="text/css">
+
 	canvas {
 	border:0;
 	display:block;
 	margin:0 auto;
 	}
+	
+	.desc {
+		width:400px;
+		margin-left:10px;
+
+	}
+	
+	body {
+			font-family: 'Source Sans Pro', sans-serif;
+			font-size: 18px;
+	}
+
+	.logo {
+		margin-right: 15px;
+	}
+
+	.hero {
+		margin-top: 30px;
+	}
+
 	</style>
 	
+
+
 </head>
 <body>
+	<header>
+	<div class="container">
+	<div class="hero">
+		<h1><span class="logo"><%= image_tag "ruby.jpeg", :size => "50x50"%></span>Ruby Hack Night: Hex App</h1>
+		<p class="offset1">
+		<span class="pull-left">
+		<%= image_tag "John.png", :size => "100x50"%>
+		</span>
+		<span class="pull-left desc">Hex is a strategy board game played on a hexagonal grid, theoretically of any size and several possible shapes, but traditionally as an 11×11 rhombus. John Nash (one of the game's inventors) advocated 14×14 as the optimal size.</span>
+		</p>
+	</div>
 
+	<div>
+	</header>
 	<canvas id="hexmap" width="660" height="624"></canvas>
-	
-	<%= yield %>
-
+	<div class="container">	
+		<%= yield %>
+	</div>
 	<script src="hexagons.js"></script>
 
 </body>
