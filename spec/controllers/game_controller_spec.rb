@@ -10,7 +10,7 @@ describe GameController do
   describe "GET new" do
     it "creates a Game object" do
       # visit 'game/new/11x11'
-      get :new
+      # get :new
       binding.pry
     end
 
