@@ -2,7 +2,6 @@ Hex::Application.routes.draw do
 
   resources :sessions
 
-
   root :to => 'sessions#index'
 
   # The priority is based upon order of creation:
