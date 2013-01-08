@@ -19,7 +19,9 @@
 	
 	.desc {
 		width:400px;
-		margin-left:10px;
+		margin-left:20px;
+		padding-top: 10px;
+		font-size: 30px;
 
 	}
 	
@@ -36,31 +38,40 @@
 		margin-top: 30px;
 	}
 
+	header {
+		margin-bottom: 50px;
+		border-bottom: 1px silver dotted;
+		padding-bottom: 50px;
+	}
+
+	.john {
+		font-size: 18px;
+		font-weight: 600;
+		padding-top:35px;
+	}
+
 	</style>
 	
-
 
 </head>
 <body>
 	<header>
 	<div class="container">
-	<div class="hero">
-		<h1><span class="logo"><%= image_tag "ruby.jpeg", :size => "50x50"%></span>Ruby Hack Night: Hex App</h1>
-		<p class="offset1">
-		<span class="pull-left">
-		<%= image_tag "John.png", :size => "100x50"%>
-		</span>
-		<span class="pull-left desc">Hex is a strategy board game played on a hexagonal grid, theoretically of any size and several possible shapes, but traditionally as an 11×11 rhombus. John Nash (one of the game's inventors) advocated 14×14 as the optimal size.</span>
-		</p>
-	</div>
-
+		<div class="hero">
+			<h1><span class="logo"><%= image_tag "ruby.jpeg", :size => "50x50"%></span>Ruby Hack Night: Playing Hex</h1>
+			<span class="pull-left john">
+			<%= image_tag "John.png", :size => "100x50"%>
+			</span>
+			<span class="pull-left desc"><h3>About Hex</h3><p>Hex is a strategy board game played on a hexagonal grid, theoretically of any size and several possible shapes, but traditionally as an 11×11 rhombus. <b>John Nash</b> (one of the game's inventors) advocated 14×14 as the optimal size.</p></span>
+		</div>
 	<div>
 	</header>
 	<canvas id="hexmap" width="660" height="624"></canvas>
 	<div class="container">	
-		<%= yield %>
-	</div>
 	<script src="hexagons.js"></script>
+	
+	<%= yield %>
+	</div>
 
 </body>
 </html>

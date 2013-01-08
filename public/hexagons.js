@@ -6,9 +6,14 @@
         hexRectangleHeight,
         hexRectangleWidth,
         hexagonAngle = 0.523598776, // 30 degrees in radians
-        sideLength = 36,
+        sideLength = 24,
         boardWidth = 10,
-        boardHeight = 10;
+        boardHeight = 11;
+
+    var bluePlayerTurn = true;
+
+    var blueFillStyle = '#0000ff';
+    var redFillStyle = '#ff0000';
 
     hexHeight = Math.sin(hexagonAngle) * sideLength;
     hexRadius = Math.cos(hexagonAngle) * sideLength;
@@ -24,6 +29,10 @@
 
         drawBoard(ctx, boardWidth, boardHeight);
 
+         $("#hexmap").click(function(e){
+            bluePlayerTurn = !bluePlayerTurn;
+         });
+
         canvas.addEventListener("mousemove", function(eventInfo) {
             var x,
                 y,
@@ -37,9 +46,9 @@
 
             
             hexY = Math.floor(y / (hexHeight + sideLength));
-            hexX = Math.floor((x - (hexY % 2) * hexRadius) / hexRectangleWidth);
+            hexX = Math.floor((x - hexY * hexRadius) / hexRectangleWidth);
 
-            screenX = hexX * hexRectangleWidth + ((hexY % 2) * hexRadius);
+            screenX = hexX * hexRectangleWidth + (hexY  * hexRadius);
             screenY = hexY * (hexHeight + sideLength);
 
             ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -49,7 +58,11 @@
             // Check if the mouse's coords are on the board
             if(hexX >= 0 && hexX < boardWidth) {
                 if(hexY >= 0 && hexY < boardHeight) {
-                    ctx.fillStyle = "#000000";
+                    if (bluePlayerTurn === true)
+                        ctx.fillStyle = blueFillStyle;
+                    else
+                        ctx.fillStyle = redFillStyle;
+                    
                     drawHexagon(ctx, screenX, screenY, true);
                 }
             }
@@ -64,7 +77,7 @@
             for(j = 0; j < height; ++j) {
                 drawHexagon(
                     ctx, 
-                    i * hexRectangleWidth + ((j % 2) * hexRadius), 
+                    i * hexRectangleWidth + (j * hexRadius), 
                     j * (sideLength + hexHeight), 
                     false
                 );
