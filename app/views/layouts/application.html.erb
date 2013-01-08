@@ -5,10 +5,23 @@
   <%= stylesheet_link_tag    "application", :media => "all" %>
   <%= javascript_include_tag "application" %>
   <%= csrf_meta_tags %>
+
+   <style type="text/css">
+	canvas {
+	border:0;
+	display:block;
+	margin:0 auto;
+	}
+	</style>
+	
 </head>
 <body>
 
-<%= yield %>
+	<canvas id="hexmap" width="660" height="624"></canvas>
+	
+	<%= yield %>
+
+	<script src="hexagons.js"></script>
 
 </body>
 </html>
