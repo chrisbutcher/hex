@@ -7,12 +7,8 @@ class Game
   end
 
   def self.create width, height
-    board_array = []
-    height.times do |row|
-      width.times do |column|
-        board_array << nil
-      end
-    end
+    board_array = [[nil] * height] * width
+
     @game = new(:board => board_array)
   end
 
