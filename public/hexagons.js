@@ -2,7 +2,7 @@
     var canvas = document.getElementById('hexmap');
 
     var radius = 24,
-        width = radius * Math.sqrt(3) / 2,
+        width = radius * Math.sqrt(3),
         boardWidth = 10,
         boardHeight = 11;
 
@@ -37,13 +37,12 @@
             y = eventInfo.offsetY || eventInfo.layerY;
 
             hexY = Math.floor(y / (radius / 2 + radius));
-            hexX = Math.floor((x - hexY * width) / (2 * width));
+            hexX = Math.floor((x - hexY * width / 2) / width);
 
-            screenX = hexX * 2 * width + (hexY  * width);
-            screenY = hexY * (radius / 2 + radius);
+            screenX = hexX * width + hexY  * width / 2;
+            screenY = hexY * 3 * radius / 2;
 
             redraw();
-
         });
     }
 
@@ -72,8 +71,8 @@
             for(j = 0; j < h; ++j) {
                 drawHexagon(
                     ctx,
-                    i * 2 * width + (j * width),
-                    j * (radius + radius / 2),
+                    i * width + j * width / 2,
+                    j * 3 * radius / 2,
                     false
                 );
             }
@@ -82,10 +81,10 @@
 
     function drawHexagon(canvasContext, x, y, fill) {
         canvasContext.beginPath();
-        canvasContext.moveTo(x + width, y);
-        canvasContext.lineTo(x + 2 * width, y + radius / 2);
-        canvasContext.lineTo(x + 2 * width, y + 3 * radius / 2);
-        canvasContext.lineTo(x + width, y + 2 * radius);
+        canvasContext.moveTo(x + width / 2, y);
+        canvasContext.lineTo(x + width, y + radius / 2);
+        canvasContext.lineTo(x + width, y + 3 * radius / 2);
+        canvasContext.lineTo(x + width / 2, y + 2 * radius);
         canvasContext.lineTo(x, y + 3 * radius / 2);
         canvasContext.lineTo(x, y + radius / 2);
         canvasContext.closePath();
