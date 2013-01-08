@@ -1,5 +1,6 @@
+require 'pp'
+
 class GameController < ApplicationController
-  require 'pp'
 
   def new
     width, height = params[:dimensions].split(/x/).map { |d| d.to_i }

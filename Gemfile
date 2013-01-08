@@ -33,6 +33,7 @@ group :test, :development do
   gem 'pry-nav'
   gem 'pry-rescue'
   gem 'pry-stack_explorer'
+  gem "capybara", "~> 2.0.2"
 end
 
 gem 'jquery-rails'
