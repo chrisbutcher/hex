@@ -1,0 +1,4 @@
+hex
+===
+
+Game of Hex
