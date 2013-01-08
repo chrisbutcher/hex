@@ -1,24 +1,18 @@
 (function(){
     var canvas = document.getElementById('hexmap');
 
-    var hexHeight,
-        hexRadius,
-        hexRectangleHeight,
-        hexRectangleWidth,
-        hexagonAngle = 0.523598776, // 30 degrees in radians
-        sideLength = 24,
+    var radius = 24,
+        width = radius * Math.sqrt(3) / 2,
         boardWidth = 10,
         boardHeight = 11;
+
+    var hexX, hexY;
+    var screenX, screenY;
 
     var bluePlayerTurn = true;
 
     var blueFillStyle = '#0000ff';
     var redFillStyle = '#ff0000';
-
-    hexHeight = Math.sin(hexagonAngle) * sideLength;
-    hexRadius = Math.cos(hexagonAngle) * sideLength;
-    hexRectangleHeight = sideLength + 2 * hexHeight;
-    hexRectangleWidth = 2 * hexRadius;
 
     if (canvas.getContext){
         var ctx = canvas.getContext('2d');
@@ -27,74 +21,73 @@
         ctx.strokeStyle = "#CCCCCC";
         ctx.lineWidth = 1;
 
-        drawBoard(ctx, boardWidth, boardHeight);
+        redraw();
 
          $("#hexmap").click(function(e){
             bluePlayerTurn = !bluePlayerTurn;
+            redraw();
          });
 
         canvas.addEventListener("mousemove", function(eventInfo) {
             var x,
                 y,
-                hexX,
-                hexY,
-                screenX,
-                screenY;
+
 
             x = eventInfo.offsetX || eventInfo.layerX;
             y = eventInfo.offsetY || eventInfo.layerY;
 
-            
-            hexY = Math.floor(y / (hexHeight + sideLength));
-            hexX = Math.floor((x - hexY * hexRadius) / hexRectangleWidth);
+            hexY = Math.floor(y / (radius / 2 + radius));
+            hexX = Math.floor((x - hexY * width) / (2 * width));
 
-            screenX = hexX * hexRectangleWidth + (hexY  * hexRadius);
-            screenY = hexY * (hexHeight + sideLength);
+            screenX = hexX * 2 * width + (hexY  * width);
+            screenY = hexY * (radius / 2 + radius);
 
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            redraw();
 
-            drawBoard(ctx, boardWidth, boardHeight);
-
-            // Check if the mouse's coords are on the board
-            if(hexX >= 0 && hexX < boardWidth) {
-                if(hexY >= 0 && hexY < boardHeight) {
-                    if (bluePlayerTurn === true)
-                        ctx.fillStyle = blueFillStyle;
-                    else
-                        ctx.fillStyle = redFillStyle;
-                    
-                    drawHexagon(ctx, screenX, screenY, true);
-                }
-            }
         });
     }
 
-    function drawBoard(canvasContext, width, height) {
+    function redraw() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      drawBoard(ctx, boardWidth, boardHeight);
+      //
+      // Check if the mouse's coords are on the board
+      if(hexX >= 0 && hexX < boardWidth) {
+          if(hexY >= 0 && hexY < boardHeight) {
+              if (bluePlayerTurn === true)
+                  ctx.fillStyle = blueFillStyle;
+              else
+                  ctx.fillStyle = redFillStyle;
+
+              drawHexagon(ctx, screenX, screenY, true);
+          }
+      }
+    }
+
+    function drawBoard(canvasContext, w, h) {
         var i,
             j;
 
-        for(i = 0; i < width; ++i) {
-            for(j = 0; j < height; ++j) {
+        for(i = 0; i < w; ++i) {
+            for(j = 0; j < h; ++j) {
                 drawHexagon(
-                    ctx, 
-                    i * hexRectangleWidth + (j * hexRadius), 
-                    j * (sideLength + hexHeight), 
+                    ctx,
+                    i * 2 * width + (j * width),
+                    j * (radius + radius / 2),
                     false
                 );
             }
         }
     }
 
-    function drawHexagon(canvasContext, x, y, fill) {           
-        var fill = fill || false;
-
+    function drawHexagon(canvasContext, x, y, fill) {
         canvasContext.beginPath();
-        canvasContext.moveTo(x + hexRadius, y);
-        canvasContext.lineTo(x + hexRectangleWidth, y + hexHeight);
-        canvasContext.lineTo(x + hexRectangleWidth, y + hexHeight + sideLength);
-        canvasContext.lineTo(x + hexRadius, y + hexRectangleHeight);
-        canvasContext.lineTo(x, y + sideLength + hexHeight);
-        canvasContext.lineTo(x, y + hexHeight);
+        canvasContext.moveTo(x + width, y);
+        canvasContext.lineTo(x + 2 * width, y + radius / 2);
+        canvasContext.lineTo(x + 2 * width, y + 3 * radius / 2);
+        canvasContext.lineTo(x + width, y + 2 * radius);
+        canvasContext.lineTo(x, y + 3 * radius / 2);
+        canvasContext.lineTo(x, y + radius / 2);
         canvasContext.closePath();
 
         if(fill) {
