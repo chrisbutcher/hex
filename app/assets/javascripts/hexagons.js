@@ -1,11 +1,6 @@
 $(document).ready(function() {
     var canvas = document.getElementById('hexmap');
 
-    if (canvas === null){
-        alert('Canvas failed to initialize');
-        return;
-    }
-
     var radius = 24,
         width = (radius * Math.sqrt(3)) - 1,
         boardWidth = 11,
