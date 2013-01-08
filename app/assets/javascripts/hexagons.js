@@ -1,5 +1,8 @@
-(function(){
+$(document).ready(function() {
     var canvas = document.getElementById('hexmap');
+
+    if (canvas === null)
+        return;
 
     var radius = 24,
         width = radius * Math.sqrt(3),
@@ -95,5 +98,4 @@
             canvasContext.stroke();
         }
     }
-
-})();
+});
