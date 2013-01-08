@@ -10,6 +10,11 @@
         boardWidth = 10,
         boardHeight = 11;
 
+    var bluePlayerTurn = true;
+
+    var blueFillStyle = '#0000ff';
+    var redFillStyle = '#ff0000';
+
     hexHeight = Math.sin(hexagonAngle) * sideLength;
     hexRadius = Math.cos(hexagonAngle) * sideLength;
     hexRectangleHeight = sideLength + 2 * hexHeight;
@@ -23,6 +28,10 @@
         ctx.lineWidth = 1;
 
         drawBoard(ctx, boardWidth, boardHeight);
+
+         $("#hexmap").click(function(e){
+            bluePlayerTurn = !bluePlayerTurn;
+         });
 
         canvas.addEventListener("mousemove", function(eventInfo) {
             var x,
@@ -49,7 +58,11 @@
             // Check if the mouse's coords are on the board
             if(hexX >= 0 && hexX < boardWidth) {
                 if(hexY >= 0 && hexY < boardHeight) {
-                    ctx.fillStyle = "#000000";
+                    if (bluePlayerTurn === true)
+                        ctx.fillStyle = blueFillStyle;
+                    else
+                        ctx.fillStyle = redFillStyle;
+                    
                     drawHexagon(ctx, screenX, screenY, true);
                 }
             }
