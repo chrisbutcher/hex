@@ -1,0 +1,16 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <b>Game:</b>
+  <%= @session.game_id %>
+</p>
+
+<canvas id="hexmap" width="660" height="624"></canvas>
+	
+<script src="/hexagons.js"></script>
+
+<% if false %>
+
+<%= link_to 'Edit', edit_session_path(@session) %> |
+<%= link_to 'Back', sessions_path %>
+<% end %>
