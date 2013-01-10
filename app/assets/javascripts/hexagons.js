@@ -1,168 +1,144 @@
 $(document).ready(function() {
-    var canvas = document.getElementById('hexmap');
+	var canvas = document.getElementById('hexmap');
 
-    var radius = 24,
-        width = (radius * Math.sqrt(3)) - 1,
-        boardWidth = 11,
-        boardHeight = 11;
+	var tileRadius = 22;
+	var tileWidth = tileRadius * Math.sqrt(3);
+	var padding = 64;
 
-    var hexX, hexY;
-    var screenX, screenY;
+	var drawBackground = false;
 
-    // Draw a thin outline around the canvas
-    var canvasOutline = false;
+	var boardWidth = 11;
+	var boardHeight = 11;
 
-    // Game starts as blue player's turn, this can be randomized eventually
-    var bluePlayerTurn = true;
+	var boardState = make2dArray(boardWidth, boardHeight, 0);
 
-    // Create a Javascript version of the board, initializing tiles to 0
-    // Blank tile = 0, Blue = 1, Red = 2
-    var boardState = make2dArray(boardWidth, boardHeight, 0);
+	var bluePlayersTurn = true;
 
-    var blueFillStyle = '#0000ff';
-    var redFillStyle = '#ff0000';
+	paper.setup(canvas);
 
-    if (canvas.getContext){
-        var ctx = canvas.getContext('2d');
+	tool1 = new paper.Tool();
+  tool1.onMouseUp = function(event) {
+  	var hitTestResult = paper.project.hitTest(event.point);
 
-        redraw();
+  	if (hitTestResult === null)
+  		return;
 
-         $("#hexmap").click(function(e){
-            // Only allow clicks on unoccupied tiles.
-            // If allowed, assign tile to current player, and change players.
-            if (boardState[hexX][hexY] === 0){
-                if (bluePlayerTurn === true){
-                    boardState[hexX][hexY] = 1;
-                }
-                else {
-                    boardState[hexX][hexY] = 2;
-                }
-                bluePlayerTurn = !bluePlayerTurn;
-            }            
-            
-            redraw();
-         });
+  	var tileClickedOn = hitTestResult.item;
 
-        canvas.addEventListener("mousemove", function(eventInfo) {
-            var x,
-                y,
+  	if (tileClickedOn === null)
+  		return;
 
-            x = eventInfo.offsetX || eventInfo.layerX;
-            y = eventInfo.offsetY || eventInfo.layerY;
+  	var clickedX = tileClickedOn.hexX;
+  	var clickedY = tileClickedOn.hexY;
 
-            hexY = Math.floor(y / (radius / 2 + radius));
-            hexX = Math.floor((x - hexY * width / 2) / width);
+  	// Check if we've clicked on a Hex tile
+  	if (tileClickedOn.hexItemType === 'hex'){
+  		// Check if the Hex tile we clicked is blank
+  		if (boardState[clickedX][clickedY] === 0){
+	  		if (bluePlayersTurn){
+	  			tileClickedOn.fillColor = 'blue';
+	  			boardState[clickedX][clickedY] = 1;
+	  			bluePlayersTurn = !bluePlayersTurn;			
+	  		}
+	  		else {
+	  			tileClickedOn.fillColor = 'red';
+	  			boardState[clickedX][clickedY] = 2;
+	  			bluePlayersTurn = !bluePlayersTurn;
+	  		}
+  		}
+  	}
+  };
 
-            screenX = hexX * width + hexY  * width / 2;
-            screenY = hexY * 3 * radius / 2;
+  if (drawBackground){
+	  // Create background
+		var rectangle = new paper.Rectangle(new paper.Point(3, 3), new paper.Point(canvas.width-3, canvas.height-3));
+		var cornerSize = new paper.Size(20, 20);
+		var path = new paper.Path.RoundRectangle(rectangle, cornerSize);
+		path.strokeColor = 'red';
+		path.fillColor = '#eee';
+	}
 
-            redraw();
-        });
-    }
+	// Create hex tile board
+	for (var i = 0; i < boardWidth; i++) {    
+	  for (var j = 0; j < boardHeight; j++) {
+	    var hexagonPosition = new paper.Point(padding + (i * tileWidth + j * tileWidth / 2), padding + (j * 3 * tileRadius / 2));
+	    var hexagon = paper.Path.RegularPolygon(hexagonPosition, 6, tileRadius);
 
-    function redraw() {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      
-      // Draw an outline around the canvas (off by default)
-      if (canvasOutline){
-          ctx.beginPath();
-          ctx.rect(0, 0, canvas.width, canvas.height);
-          ctx.lineWidth = 1;
-          ctx.strokeStyle = 'red';
-          ctx.stroke();
-          ctx.closePath();
-      }
-      
-      // Draw game board (including previously placed tiles)
-      drawBoard(ctx, boardWidth, boardHeight);
+	    hexagon.strokeColor = 'black';
+	    hexagon.fillColor = 'lightgray';
 
-      // And drawing on top of the game board...
-      // Check if the mouse's coords are on the board
-      if(hexX >= 0 && hexX < boardWidth) {
-          if(hexY >= 0 && hexY < boardHeight) {
+	    hexagon.hexItemType = 'hex';
+	    hexagon.hexX = i;
+	    hexagon.hexY = j;
+	  };
+	};
 
-              // Only draw a colored hexagon representing the current player
-              // if the tile below is blank
-              if (boardState[hexX][hexY] === 0){
-                  if (bluePlayerTurn === true){
-                      drawHexagon(ctx, screenX, screenY, 1);
-                  }
-                  else{
-                      drawHexagon(ctx, screenX, screenY, 2);
-                  }              
-              }
-          }
-      }
+	// Create hex tile goal tiles (blue)
+	for (var i = -1; i < boardWidth + 1; i++) {    
+	  for (var j = -1; j < boardHeight + 1; j++) {
+	    if ((i === -1 && j > -1 && j < boardHeight) || (i === boardWidth && j > -1 && j < boardHeight)){
+		    var hexagonPosition = new paper.Point(padding + (i * tileWidth + j * tileWidth / 2), padding + (j * 3 * tileRadius / 2));
+		    var hexagon = paper.Path.RegularPolygon(hexagonPosition, 6, tileRadius);
 
-      drawDebugInfo(ctx, canvas.width, canvas.height);
-    }
+		    hexagon.strokeColor = 'black';
+		    hexagon.fillColor = 'darkblue';
 
-    // Method for displaying debug information below
-    function drawDebugInfo(canvasContext, canvasWidth, canvasHeight) {
-        canvasContext.fillStyle = '#000';
-        canvasContext.font = 'bold 12px sans-serif';
-        canvasContext.textBaseline = 'bottom';
-        canvasContext.fillText('X: ' + hexX + ', Y: ' + hexY, 0, canvasHeight-200);
-        if (bluePlayerTurn)
-            canvasContext.fillText("Blue's turn", 0, canvasHeight-185);
-        else
-            canvasContext.fillText("Red's turn", 0, canvasHeight-185);
-    }
+		    hexagon.hexItemType = 'blueGoal';
+		    hexagon.hexX = i;
+		    hexagon.hexY = j;
 
-    function drawBoard(canvasContext, w, h) {
-        canvasContext.fillStyle = "#000000";
-        canvasContext.strokeStyle = "#CCCCCC";
-        canvasContext.lineWidth = 1;
+		    var text = new paper.PointText(hexagonPosition);
+				text.justification = 'center';
+				text.fillColor = 'white';
+				text.content = j + 1;
+	    }
+	  };
+	};
 
-        var i,
-            j;
+	// Create hex tile goal tiles (red)
+	for (var i = -1; i < boardWidth + 1; i++) {    
+	  for (var j = -1; j < boardHeight + 1; j++) {
+	    if ((j === -1 && i > -1 && i < boardWidth) || (j === boardHeight && i > -1 && i < boardWidth)){
+		    var hexagonPosition = new paper.Point(padding + (i * tileWidth + j * tileWidth / 2), padding + (j * 3 * tileRadius / 2));
+		    var hexagon = paper.Path.RegularPolygon(hexagonPosition, 6, tileRadius);
 
-        for(i = 0; i < w; ++i) {
-            for(j = 0; j < h; ++j) {
-                drawHexagon(
-                    ctx,
-                    i * width + j * width / 2,
-                    j * 3 * radius / 2,
-                    boardState[i][j]
-                );
-            }
-        }
-    }
+		    hexagon.strokeColor = 'black';
+		    hexagon.fillColor = 'darkred';
 
-    function drawHexagon(canvasContext, x, y, fill) {
-        canvasContext.beginPath();
-        canvasContext.moveTo(x + width / 2, y);
-        canvasContext.lineTo(x + width, y + radius / 2);
-        canvasContext.lineTo(x + width, y + 3 * radius / 2);
-        canvasContext.lineTo(x + width / 2, y + 2 * radius);
-        canvasContext.lineTo(x, y + 3 * radius / 2);
-        canvasContext.lineTo(x, y + radius / 2);
-        canvasContext.closePath();
+		    hexagon.hexItemType = 'redGoal';
+		    hexagon.hexX = i;
+		    hexagon.hexY = j;
 
-        if(fill === 0) {
-            canvasContext.stroke();            
-        }
-        else if (fill === 1) {
-            canvasContext.fillStyle = blueFillStyle;
-            canvasContext.fill();
-        }
-        else if (fill === 2) {    
-            canvasContext.fillStyle = redFillStyle;
-            canvasContext.fill();
-        }
-    }
+		    var text = new paper.PointText(hexagonPosition);
+				text.justification = 'center';
+				text.fillColor = 'white';
+				text.content = String.fromCharCode(64 + i + 1);
+	    }
+	  };
+	};
 
-    // Helpers placed below here for now:
-    function make2dArray(width, height, initValue) {
-        var array = [];
+	var debugText = new paper.PointText(new paper.Point(padding, canvas.height - 180));
+	debugText.justification = 'center';
+	debugText.fillColor = 'black';
+		
+  paper.view.onFrame = function(event) {
+ 		if (bluePlayersTurn)
+ 			debugText.content = "Blue's turn.";
+ 		else
+ 			debugText.content = "Red's turn.";
+  };
 
-        for (var i = 0, l = width; i < l; i++) {
-            array[i] = [];
-            for (var j = 0; j < height; j++) {
-                array[i][j] = initValue;
-            }
-        }
-
-        return array;
-    }
+	paper.view.draw();
 });
+
+function make2dArray(width, height, initValue){
+	var array = []
+	for (var i = 0; i < width; i++) {		
+			array[i] = [];
+			for (var j = 0; j < height; j++) {
+				array[i][j] = initValue;
+			};
+	};
+
+	return array;
+}
