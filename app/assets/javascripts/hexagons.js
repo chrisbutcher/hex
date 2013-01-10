@@ -17,7 +17,7 @@ $(document).ready(function() {
 	paper.setup(canvas);
 
 	tool1 = new paper.Tool();
-  tool1.onMouseUp = function(event) {
+  tool1.onMouseDown = function(event) {
   	var hitTestResult = paper.project.hitTest(event.point);
 
   	if (hitTestResult === null)
