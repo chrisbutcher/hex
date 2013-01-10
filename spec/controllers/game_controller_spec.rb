@@ -7,16 +7,12 @@ describe GameController do
     controller.params[:dimensions] = "11x11"
   end
 
-  describe "GET new" do
-    it "creates a Game object" do
-      # visit 'game/new/11x11'
-      # get :new
-      binding.pry
+  describe '#new' do
+    it "creates a game object" do
+      get :new
+      assigns[:game].should be_an_instance_of Game
     end
-
-
   end
-
 
 
 end
