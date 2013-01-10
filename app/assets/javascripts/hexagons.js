@@ -90,6 +90,7 @@ $(document).ready(function() {
 		    var text = new paper.PointText(hexagonPosition);
 				text.justification = 'center';
 				text.fillColor = 'white';
+				text.position.y += tileRadius / 5;
 				text.content = j + 1;
 	    }
 	  };
@@ -112,6 +113,7 @@ $(document).ready(function() {
 		    var text = new paper.PointText(hexagonPosition);
 				text.justification = 'center';
 				text.fillColor = 'white';
+				text.position.y += tileRadius / 5;
 				text.content = String.fromCharCode(64 + i + 1);
 	    }
 	  };
