@@ -19,11 +19,6 @@ group :assets do
   gem 'uglifier', '>= 1.0.3'
 end
 
-group :test do
-  gem 'rspec-rails'
-
-end
-
 group :test, :development do
   gem 'better_errors'
   gem 'binding_of_caller'
@@ -33,6 +28,7 @@ group :test, :development do
   gem 'pry-rescue'
   gem 'pry-stack_explorer'
   gem "capybara", "~> 2.0.2"
+  gem 'rspec-rails'
 end
 
 gem 'jquery-rails'
