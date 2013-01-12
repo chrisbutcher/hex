@@ -7,8 +7,14 @@ $(document).ready(function() {
 
 	var drawBackground = false;
 
-	var boardWidth = 11;
-	var boardHeight = 11;
+	if (HexGlobals.width && HexGlobals.height){
+		var boardWidth = HexGlobals.width;
+		var boardHeight = HexGlobals.height;
+	}
+	else {
+		var boardWidth = 11;
+		var boardHeight = 11;
+	}
 
 	var boardState = make2dArray(boardWidth, boardHeight, 0);
 
