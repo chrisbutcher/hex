@@ -4,15 +4,20 @@ var initGame = function(boardWidth, boardHeight) {
   if(typeof(boardWidth)==='undefined') boardWidth = 11;
   if(typeof(boardHeight)==='undefined') boardHeight = 11;
 
-  var boardState = make2dArray(boardWidth, boardHeight, 0);
-
   var tileRadius = 22;
   var tileWidth = tileRadius * Math.sqrt(3);
   var padding = 64;
 
   var drawBackground = false;
 
+  var boardWidth = 11;
+  var boardHeight = 11;
+
+  var boardState = make2dArray(boardWidth, boardHeight, 0);
+
   var bluePlayersTurn = true;
+
+  var turnIndicator;
 
   paper.setup(canvas);
 
@@ -38,13 +43,13 @@ var initGame = function(boardWidth, boardHeight) {
         if (bluePlayersTurn){
           tileClickedOn.fillColor = 'blue';
           boardState[clickedX][clickedY] = 1;
-          bluePlayersTurn = !bluePlayersTurn;     
         }
         else {
           tileClickedOn.fillColor = 'red';
           boardState[clickedX][clickedY] = 2;
-          bluePlayersTurn = !bluePlayersTurn;
         }
+        bluePlayersTurn = !bluePlayersTurn;
+        updateTurnIndicator();
       }
     }
   };
@@ -59,7 +64,7 @@ var initGame = function(boardWidth, boardHeight) {
   }
 
   // Create hex tile board
-  for (var i = 0; i < boardWidth; i++) {    
+  for (var i = 0; i < boardWidth; i++) {
     for (var j = 0; j < boardHeight; j++) {
       var hexagonPosition = new paper.Point(padding + (i * tileWidth + j * tileWidth / 2), padding + (j * 3 * tileRadius / 2));
       var hexagon = paper.Path.RegularPolygon(hexagonPosition, 6, tileRadius);
@@ -74,7 +79,7 @@ var initGame = function(boardWidth, boardHeight) {
   };
 
   // Create hex tile goal tiles (blue)
-  for (var i = -1; i < boardWidth + 1; i++) {    
+  for (var i = -1; i < boardWidth + 1; i++) {
     for (var j = -1; j < boardHeight + 1; j++) {
       if ((i === -1 && j > -1 && j < boardHeight) || (i === boardWidth && j > -1 && j < boardHeight)){
         var hexagonPosition = new paper.Point(padding + (i * tileWidth + j * tileWidth / 2), padding + (j * 3 * tileRadius / 2));
@@ -97,7 +102,7 @@ var initGame = function(boardWidth, boardHeight) {
   };
 
   // Create hex tile goal tiles (red)
-  for (var i = -1; i < boardWidth + 1; i++) {    
+  for (var i = -1; i < boardWidth + 1; i++) {
     for (var j = -1; j < boardHeight + 1; j++) {
       if ((j === -1 && i > -1 && i < boardWidth) || (j === boardHeight && i > -1 && i < boardWidth)){
         var hexagonPosition = new paper.Point(padding + (i * tileWidth + j * tileWidth / 2), padding + (j * 3 * tileRadius / 2));
@@ -119,23 +124,26 @@ var initGame = function(boardWidth, boardHeight) {
     };
   };
 
-  var debugText = new paper.PointText(new paper.Point(padding, canvas.height - 180));
-  debugText.justification = 'center';
-  debugText.fillColor = 'black';
-    
-  paper.view.onFrame = function(event) {
-    if (bluePlayersTurn)
-      debugText.content = "Blue's turn.";
-    else
-      debugText.content = "Red's turn.";
-  };
+  turnIndicator = new paper.PointText(new paper.Point(padding, canvas.height - 180));
+  turnIndicator.justification = 'center';
+  turnIndicator.fillColor = 'black';
+  updateTurnIndicator();
 
   paper.view.draw();
-}
+
+  function updateTurnIndicator() {
+    if (bluePlayersTurn) {
+      turnIndicator.content = "Blue's turn.";
+    } else {
+      turnIndicator.content = "Red's turn.";
+    }
+  }
+};
+
 
 function make2dArray(width, height, initValue){
   var array = []
-  for (var i = 0; i < width; i++) {   
+  for (var i = 0; i < width; i++) {
       array[i] = [];
       for (var j = 0; j < height; j++) {
         array[i][j] = initValue;
