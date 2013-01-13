@@ -10,9 +10,6 @@ var initGame = function(boardWidth, boardHeight) {
 
   var drawBackground = false;
 
-  var boardWidth = 11;
-  var boardHeight = 11;
-
   var boardState = make2dArray(boardWidth, boardHeight, 0);
 
   var bluePlayersTurn = true;
