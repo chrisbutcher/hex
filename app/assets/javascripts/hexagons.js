@@ -14,6 +14,8 @@ $(document).ready(function() {
 
 	var bluePlayersTurn = true;
 
+  var turnIndicator;
+
 	paper.setup(canvas);
 
 	tool1 = new paper.Tool();
@@ -38,13 +40,13 @@ $(document).ready(function() {
 	  		if (bluePlayersTurn){
 	  			tileClickedOn.fillColor = 'blue';
 	  			boardState[clickedX][clickedY] = 1;
-	  			bluePlayersTurn = !bluePlayersTurn;			
 	  		}
 	  		else {
 	  			tileClickedOn.fillColor = 'red';
 	  			boardState[clickedX][clickedY] = 2;
-	  			bluePlayersTurn = !bluePlayersTurn;
 	  		}
+        bluePlayersTurn = !bluePlayersTurn;
+        updateTurnIndicator();
   		}
   	}
   };
@@ -59,7 +61,7 @@ $(document).ready(function() {
 	}
 
 	// Create hex tile board
-	for (var i = 0; i < boardWidth; i++) {    
+	for (var i = 0; i < boardWidth; i++) {
 	  for (var j = 0; j < boardHeight; j++) {
 	    var hexagonPosition = new paper.Point(padding + (i * tileWidth + j * tileWidth / 2), padding + (j * 3 * tileRadius / 2));
 	    var hexagon = paper.Path.RegularPolygon(hexagonPosition, 6, tileRadius);
@@ -74,7 +76,7 @@ $(document).ready(function() {
 	};
 
 	// Create hex tile goal tiles (blue)
-	for (var i = -1; i < boardWidth + 1; i++) {    
+	for (var i = -1; i < boardWidth + 1; i++) {
 	  for (var j = -1; j < boardHeight + 1; j++) {
 	    if ((i === -1 && j > -1 && j < boardHeight) || (i === boardWidth && j > -1 && j < boardHeight)){
 		    var hexagonPosition = new paper.Point(padding + (i * tileWidth + j * tileWidth / 2), padding + (j * 3 * tileRadius / 2));
@@ -97,7 +99,7 @@ $(document).ready(function() {
 	};
 
 	// Create hex tile goal tiles (red)
-	for (var i = -1; i < boardWidth + 1; i++) {    
+	for (var i = -1; i < boardWidth + 1; i++) {
 	  for (var j = -1; j < boardHeight + 1; j++) {
 	    if ((j === -1 && i > -1 && i < boardWidth) || (j === boardHeight && i > -1 && i < boardWidth)){
 		    var hexagonPosition = new paper.Point(padding + (i * tileWidth + j * tileWidth / 2), padding + (j * 3 * tileRadius / 2));
@@ -119,23 +121,26 @@ $(document).ready(function() {
 	  };
 	};
 
-	var debugText = new paper.PointText(new paper.Point(padding, canvas.height - 180));
-	debugText.justification = 'center';
-	debugText.fillColor = 'black';
-		
-  paper.view.onFrame = function(event) {
- 		if (bluePlayersTurn)
- 			debugText.content = "Blue's turn.";
- 		else
- 			debugText.content = "Red's turn.";
-  };
+	turnIndicator = new paper.PointText(new paper.Point(padding, canvas.height - 180));
+	turnIndicator.justification = 'center';
+	turnIndicator.fillColor = 'black';
+  updateTurnIndicator();
 
 	paper.view.draw();
+
+  function updateTurnIndicator() {
+    if (bluePlayersTurn) {
+      turnIndicator.content = "Blue's turn.";
+    } else {
+      turnIndicator.content = "Red's turn.";
+    }
+  }
 });
+
 
 function make2dArray(width, height, initValue){
 	var array = []
-	for (var i = 0; i < width; i++) {		
+	for (var i = 0; i < width; i++) {
 			array[i] = [];
 			for (var j = 0; j < height; j++) {
 				array[i][j] = initValue;
