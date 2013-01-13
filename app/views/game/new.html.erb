@@ -6,6 +6,10 @@
 
 <canvas id="hexmap" width="700" height="600"></canvas>
 
+<script>
+	initGame(<%= @game.getDimensions[0]  %>, <%= @game.getDimensions[1] %>);
+</script>
+
 <% if false %>
 
 <%= link_to 'Edit', edit_session_path(@session) %> |
