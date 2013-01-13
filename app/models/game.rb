@@ -24,6 +24,8 @@ class Game
     @board[y][x] = color
   end
 
-
+  def getDimensions
+    return @width, @height
+  end
 
 end
