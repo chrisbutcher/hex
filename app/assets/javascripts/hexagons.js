@@ -1,23 +1,25 @@
 var initGame = function(boardWidth, boardHeight) {
   var canvas = document.getElementById('hexmap');
+  
+  if (canvas===null){
+    console.log('Hex: Canvas could not be initialized.');
+    return;
+  }
 
   if(typeof(boardWidth)==='undefined') boardWidth = 11;
   if(typeof(boardHeight)==='undefined') boardHeight = 11;
 
-  var tileRadius = 22;
-  var tileWidth = tileRadius * Math.sqrt(3);
-  var padding = 64;
+  var tileRadius = Math.min(canvas.width / (Math.sqrt(3) * ((boardWidth+1) +(boardHeight+1)/2)),
+                       canvas.height / (3 * (boardHeight+1) / 2));
+
+  var tileWidth = tileRadius * Math.sqrt(3);  
+  var padding = tileWidth * 1.5;
 
   var drawBackground = false;
-
-  var boardWidth = 11;
-  var boardHeight = 11;
+  var bluePlayersTurn = true;
+  var turnIndicator = null;
 
   var boardState = make2dArray(boardWidth, boardHeight, 0);
-
-  var bluePlayersTurn = true;
-
-  var turnIndicator;
 
   paper.setup(canvas);
 
@@ -139,7 +141,6 @@ var initGame = function(boardWidth, boardHeight) {
     }
   }
 };
-
 
 function make2dArray(width, height, initValue){
   var array = []
