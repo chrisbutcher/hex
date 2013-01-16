@@ -1,4 +1,4 @@
-var initGame = function(boardWidth, boardHeight) {
+var initGame = function(boardWidth, boardHeight, cpuPlayerEnabled) {
   var canvas = document.getElementById('hexmap');
   
   if (canvas===null){
@@ -8,6 +8,7 @@ var initGame = function(boardWidth, boardHeight) {
 
   if(typeof(boardWidth)==='undefined') boardWidth = 11;
   if(typeof(boardHeight)==='undefined') boardHeight = 11;
+  if(typeof(cpuPlayer)==='undefined') cpuPlayer = false;
 
   var tileRadius = Math.min(canvas.width / (Math.sqrt(3) * ((boardWidth+1) +(boardHeight+1)/2)),
                        canvas.height / (3 * (boardHeight+1) / 2));
@@ -20,6 +21,7 @@ var initGame = function(boardWidth, boardHeight) {
   var turnIndicator = null;
 
   var boardState = make2dArray(boardWidth, boardHeight, 0);
+  var hexTiles = []
 
   paper.setup(canvas);
 
@@ -52,6 +54,8 @@ var initGame = function(boardWidth, boardHeight) {
         }
         bluePlayersTurn = !bluePlayersTurn;
         updateTurnIndicator();
+        if (cpuPlayerEnabled)
+          cpuPlayerTick();
       }
     }
   };
@@ -67,6 +71,7 @@ var initGame = function(boardWidth, boardHeight) {
 
   // Create hex tile board
   for (var i = 0; i < boardWidth; i++) {
+    hexTiles[i] = []
     for (var j = 0; j < boardHeight; j++) {
       var hexagonPosition = new paper.Point(padding + (i * tileWidth + j * tileWidth / 2), padding + (j * 3 * tileRadius / 2));
       var hexagon = paper.Path.RegularPolygon(hexagonPosition, 6, tileRadius);
@@ -77,6 +82,8 @@ var initGame = function(boardWidth, boardHeight) {
       hexagon.hexItemType = 'hex';
       hexagon.hexX = i;
       hexagon.hexY = j;
+
+      hexTiles[i][j] = hexagon;
     };
   };
 
@@ -139,6 +146,38 @@ var initGame = function(boardWidth, boardHeight) {
     } else {
       turnIndicator.content = "Red's turn.";
     }
+  }
+
+  // For now, The CPU player simply picks a random free tile
+  function cpuPlayerTick(){    
+    // Store positions of free tiles
+    var freeTileSpots = [];
+    for (i = 0; i < boardWidth; i++){
+      for (j = 0; j < boardHeight; j++){
+        if (boardState[i][j] === 0){
+          freeTileSpots.push([i,j]);
+        }
+      }
+    }
+
+    // Check that we found some free tiles
+    if (freeTileSpots.length < 1)
+      return;
+
+    // Randomly pick one
+    var random = Math.floor(Math.random() * (freeTileSpots.length + 1));
+    var randomX = freeTileSpots[random][0];
+    var randomY = freeTileSpots[random][1];
+
+    // Pick that tile and colour it
+    // For now, we're manually syncing between the hexTiles paper.js Path array
+    // and the boardState array that can be used for remote sync and win-checking
+    boardState[randomX][randomY] = 2;
+    hexTiles[randomX][randomY].fillColor = 'red';
+
+    // Change turns
+    bluePlayersTurn = true;
+    updateTurnIndicator();
   }
 };
 
