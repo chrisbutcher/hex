@@ -121,7 +121,7 @@ var initGame = function(boardWidth, boardHeight) {
         text.justification = 'center';
         text.fillColor = 'white';
         text.position.y += tileRadius / 5;
-        text.content = String.fromCharCode(64 + i + 1);
+        text.content = String.fromCharCode(65 + i);
       }
     };
   };
