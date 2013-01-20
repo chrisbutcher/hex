@@ -8,7 +8,7 @@ var initGame = function(boardWidth, boardHeight, cpuPlayerEnabled) {
 
   if(typeof(boardWidth)==='undefined') boardWidth = 11;
   if(typeof(boardHeight)==='undefined') boardHeight = 11;
-  if(typeof(cpuPlayer)==='undefined') cpuPlayer = false;
+  if(typeof(cpuPlayerEnabled)==='undefined') cpuPlayerEnabled = false;
 
   var tileRadius = Math.min(canvas.width / (Math.sqrt(3) * ((boardWidth+1) +(boardHeight+1)/2)),
                        canvas.height / (3 * (boardHeight+1) / 2));
@@ -20,13 +20,23 @@ var initGame = function(boardWidth, boardHeight, cpuPlayerEnabled) {
   var bluePlayersTurn = true;
   var turnIndicator = null;
 
-  var boardState = make2dArray(boardWidth, boardHeight, 0);
+  var gameWon = false;
+
+  var mapsize_x = boardWidth;
+  var mapsize_y = boardHeight;
+  JsAStar.init(boardWidth, boardHeight);
+
+  var boardState = JsAStar.make2dArray(mapsize_x,mapsize_y, 0);
+
   var hexTiles = []
 
   paper.setup(canvas);
 
   tool1 = new paper.Tool();
   tool1.onMouseDown = function(event) {
+    if (gameWon)
+      return;
+
     var hitTestResult = paper.project.hitTest(event.point);
 
     if (hitTestResult === null)
@@ -52,8 +62,17 @@ var initGame = function(boardWidth, boardHeight, cpuPlayerEnabled) {
           tileClickedOn.fillColor = 'red';
           boardState[clickedX][clickedY] = 2;
         }
+
+        if (bluePlayersTurn)
+          checkWin(1);
+        else{
+          if (!cpuPlayerEnabled)
+            checkWin(2);
+        }
+
         bluePlayersTurn = !bluePlayersTurn;
         updateTurnIndicator();
+
         if (cpuPlayerEnabled)
           cpuPlayerTick();
       }
@@ -150,6 +169,10 @@ var initGame = function(boardWidth, boardHeight, cpuPlayerEnabled) {
 
   // For now, The CPU player simply picks a random free tile
   function cpuPlayerTick(){    
+
+    if (gameWon)
+      return;
+
     // Store positions of free tiles
     var freeTileSpots = [];
     for (i = 0; i < boardWidth; i++){
@@ -165,7 +188,7 @@ var initGame = function(boardWidth, boardHeight, cpuPlayerEnabled) {
       return;
 
     // Randomly pick one
-    var random = Math.floor(Math.random() * (freeTileSpots.length + 1));
+    var random = Math.floor(Math.random() * (freeTileSpots.length));
     var randomX = freeTileSpots[random][0];
     var randomY = freeTileSpots[random][1];
 
@@ -175,20 +198,35 @@ var initGame = function(boardWidth, boardHeight, cpuPlayerEnabled) {
     boardState[randomX][randomY] = 2;
     hexTiles[randomX][randomY].fillColor = 'red';
 
+    checkWin(2);
+
     // Change turns
     bluePlayersTurn = true;
     updateTurnIndicator();
   }
-};
 
-function make2dArray(width, height, initValue){
-  var array = []
-  for (var i = 0; i < width; i++) {
-      array[i] = [];
-      for (var j = 0; j < height; j++) {
-        array[i][j] = initValue;
-      };
-  };
+  function checkWin(playerCode) {
+    for (i = 0; i < boardWidth; i++){
+      for (j = 0; j < boardWidth; j++){
+        if (playerCode === 1)
+          var result =  JsAStar.path(0, i, boardWidth-1, j, playerCode, boardState);
+        else
+          var result =  JsAStar.path(i, 0, j, boardHeight-1, playerCode, boardState);
 
-  return array;
-}
+        if (result != false){
+          if (playerCode === 1)
+            alert("Blue wins");
+          else
+            alert("Red wins");
+
+          gameWon = true;
+
+          for (i = 0; i < result.length; i++)
+            hexTiles[result[i][0]][result[i][1]].fillColor = 'yellow';          
+
+          return;
+        }
+      }
+    }    
+  }
+}; // end of initGame()
