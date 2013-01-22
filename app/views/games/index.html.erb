@@ -1,0 +1,25 @@
+<p id="notice"><%= notice %></p>
+
+<p id="game-top">
+  <b>Games:</b>
+</p>
+
+<%= form_for(Game.new, remote: true) do |f| %>
+  <%= f.submit "Create Game", :class => "btn" %>
+<% end %>
+
+<table class="table table-condensed table-bordered table-hover games-table" id="games">
+  <thead>
+    <tr>
+      <th>Game id</th>
+      <th>Player 1</th>
+      <th>Player 2</th>
+      <th>Join</th>
+      <th>Delete</th>
+    </tr>
+  </thead>
+  <tbody>
+    <%= render @games %>
+  </tbody>
+
+</table>

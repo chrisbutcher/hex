@@ -1,0 +1,7 @@
+    <tr class="<%= dom_id(game) %>">
+      <td><%= game.id %></td>
+      <td><%= game.horiz_user_id %></td>
+      <td><%= game.vert_user_id %></td>
+      <td><%= link_to "Join" %></td>
+      <td><%= link_to "Delete", game, method: :delete, remote: true %></td>
+    </tr>

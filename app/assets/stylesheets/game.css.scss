@@ -1,3 +1,42 @@
 // Place all the styles related to the game controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
+
+canvas {
+  border:0;
+  display:block;
+  margin:0 auto;
+}
+
+.desc {
+  width:400px;
+  margin-left:20px;
+  padding-top: 10px;
+  font-size: 30px;
+
+}
+
+body {
+  font-family: 'Source Sans Pro', sans-serif;
+  font-size: 18px;
+}
+
+.logo {
+  margin-right: 15px;
+}
+
+.hero {
+  margin-top: 30px;
+}
+
+header {
+  margin-bottom: 20px;
+  border-bottom: 1px silver dotted;
+  padding-bottom: 20px;
+}
+
+.john {
+  font-size: 18px;
+  font-weight: 600;
+  padding-top:35px;
+}
