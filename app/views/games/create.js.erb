@@ -1,0 +1,2 @@
+$('#games tbody').append("<%= escape_javascript(render @game) %>");
+$('#<%= dom_id(@game) %>').effect('highlight');

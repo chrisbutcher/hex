@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe GameController do
+describe GamesController do
   describe '#new' do
     it "creates a game object" do
       get :new, :dimensions => "11x11"

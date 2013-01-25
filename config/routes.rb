@@ -1,9 +1,12 @@
 Hex::Application.routes.draw do
 
   resources :sessions
+  resources :games
 
-  root :to => 'game#new', :dimensions => "11x11"
-  match 'game/new/:dimensions' => 'game#new', :as => 'new_game', :dimensions => "11x11"
+  root :to => 'games#index'
+  # root :to => 'game#show', :dimensions => "11x11"
+  match 'game/show/:dimensions' => 'game#show', :as => 'show_game', :dimensions => "11x11"
+  match 'new', :to => 'games#new'
 
   # The priority is based upon order of creation:
   # first created -> highest priority.
