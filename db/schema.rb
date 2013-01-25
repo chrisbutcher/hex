@@ -13,11 +13,6 @@
 
 ActiveRecord::Schema.define(:version => 20130118055422) do
 
-  create_table "boards", :force => true do |t|
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
-  end
-
   create_table "games", :force => true do |t|
     t.datetime "created_at",        :null => false
     t.datetime "updated_at",        :null => false
@@ -31,12 +26,6 @@ ActiveRecord::Schema.define(:version => 20130118055422) do
     t.integer  "move_time_limit"
     t.datetime "last_move_at"
     t.string   "win_state"
-  end
-
-  create_table "sessions", :force => true do |t|
-    t.integer  "game_id"
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
   end
 
 end
