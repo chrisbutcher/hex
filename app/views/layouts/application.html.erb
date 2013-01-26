@@ -12,21 +12,34 @@
 
 </head>
 <body>
-	<header>
 	<div class="container">
-		<div class="hero">
-			<h1><span class="logo"><%= image_tag "ruby.jpeg", :size => "50x50"%></span>Ruby Hack Night: Playing Hex</h1>
-			<span class="pull-left john">
-			<%= image_tag "John.png", :size => "100x50"%>
-			</span>
-			<span class="pull-left desc"><h3>About Hex</h3><p>Hex is a strategy board game played on a hexagonal grid, theoretically of any size and several possible shapes, but traditionally as an 11×11 rhombus. <b>John Nash</b> (one of the game's inventors) advocated 14×14 as the optimal size.</p></span>
-		</div>
-		<%= render 'debug-menu' %>
-	<div>
-	</header>
-	<div class="container">
-		<%= yield %>
+    <div class="row">
+      <div class="span9">
+        <div class="hero">
+          <h1>
+            <span class="logo"><%= image_tag "ruby.jpeg", :size => "50x50"%></span>
+            Ruby Hack Night: Playing Hex
+          </h1>
+        </div>
+        <%= render 'debug-menu' %>
+        <%= yield %>
+      </div>
+      <div class="span1"></div>
+      <div class="span2">
+        <span class="pull-left john">
+          <%= image_tag "John.png", :size => "100x50"%>
+        </span>
+        <span class="desc">
+          <h3>About Hex</h3>
+          <p>
+            Hex is a strategy board game played on a hexagonal grid,
+            theoretically of any size and several possible shapes,
+            but traditionally as an 11×11 rhombus.
+            <b>John Nash</b> (one of the game's inventors)
+            advocated 14×14 as the optimal size.
+          </p></span>
+      </div>
+    </div>
 	</div>
-
 </body>
 </html>

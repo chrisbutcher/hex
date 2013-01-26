@@ -12,8 +12,3 @@
  *= require jquery.ui.all
  *= require_tree .
  */
-
-.debug-menu{
-	clear: both;
-	padding-top: 10px;
-}
