@@ -58,7 +58,7 @@ class GamesController < ApplicationController
 
   def show
     width, height = params[:dimensions].split(/x/).map { |d| d.to_i }
-    @game = Game.create(width, height)
+    @game = Game.start(width, height)
     @game.save(session)
   end
 
