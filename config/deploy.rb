@@ -31,7 +31,7 @@ end
 
 namespace :db do
   task :db_config, :role => :app do
-    run "cp -f #{File.join(shared_path, "database.yml")} #{File.join(release_path, "/config/database.yml"}"
+    run "cp -f #{File.join(shared_path, "database.yml")} #{File.join(release_path, "/config/database.yml")}"
   end
 end
 
