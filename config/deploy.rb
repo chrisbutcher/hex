@@ -12,7 +12,6 @@ set :user, "pete"
 set :use_sudo, false
 set :deploy_to, "/home/www/playhex"
 
-
 set :branch, "master"
 set :deploy_via, :remote_cache
 
@@ -22,9 +21,6 @@ role :db,  "playhex.ca", :primary => true # This is where Rails migrations will 
 
 after "deploy:restart", "deploy:cleanup"
 
-# if you're still using the script/reaper helper you will need
-# these http://github.com/rails/irs_process_scripts
-
 namespace :deploy do
   task :start do ; end
   task :stop do ; end
@@ -32,3 +28,11 @@ namespace :deploy do
     run "#{try_sudo} touch #{File.join(current_path,'tmp','restart.txt')}"
   end
 end
+
+namespace :db do
+  task :db_config, :role => :app do
+    run "cp -f #{File.join(shared_path, "database.yml")} #{File.join(release_path, "/config/database.yml"}"
+  end
+end
+
+after "deploy:finalize_update", "db:db_config"
