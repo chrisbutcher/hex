@@ -2,29 +2,20 @@ require 'pp'
 
 class GamesController < ApplicationController
 
-  def new
-    # width, height = params[:dimensions].split(/x/).map { |d| d.to_i }
-    # @game = Game.new(width, height)
-    # @game.save(session)
-    @games = Game.all
-    @game = Game.new
-  end
-
   def move
     @game = Game.load(session)
     @game.move(params[:x], params[:y], params[:color])
   end
 
-  def game
-  end
-
   def index
     @games = Game.all
-
   end
 
   def create
     @game = Game.new(params[:game])
+    @game.board_width = params[:dimensions]
+    @game.board_height = params[:dimensions]
+    @game.start()
 
     respond_to do |format|
       if @game.save
@@ -49,17 +40,18 @@ class GamesController < ApplicationController
       format.html { redirect_to games_url }
       format.js
     end
-
   end
 
   def join
-
+    @game = Game.find(params[:id])
+    
+    respond_to do |format|
+      format.html { redirect_to :action => "show", :id => @game.id }
+    end
   end
 
   def show
-    width, height = params[:dimensions].split(/x/).map { |d| d.to_i }
-    @game = Game.start(width, height)
-    @game.save(session)
+    @game = Game.find(params[:id])
   end
 
 end
