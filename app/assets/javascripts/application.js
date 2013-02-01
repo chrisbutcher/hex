@@ -14,3 +14,8 @@
 //= require jquery.ui.all
 //= require jquery_ujs
 //= require_tree .
+
+// $(document).ajaxComplete(function(e, request, opts) {
+//   fireFlash(request.getResponseHeader('X-Message'),
+//   request.getResponseHeader('X-Message-Type'));
+// });

@@ -21,6 +21,7 @@ class GamesController < ApplicationController
 
     respond_to do |format|
       if @game.save
+        # flash[:success] = "Game was successfully created."
         format.html  { redirect_to(@game,
                       :notice => 'Game was successfully created.') }
         format.json  { render :json => @game,
@@ -46,7 +47,7 @@ class GamesController < ApplicationController
 
   def join
     @game = Game.find(params[:id])
-    
+
     respond_to do |format|
       format.html { redirect_to :action => "show", :id => @game.id }
     end

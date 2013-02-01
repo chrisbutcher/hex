@@ -14,14 +14,24 @@
 <body>
 	<div class="container">
     <div class="row">
+      <div class="span12">
+        <%= render 'shared/user_header' %>
+
+      </div>
+    </div>
+    <div class="row">
       <div class="span9">
         <div class="hero">
           <h1>
-            <span class="logo"><%= link_to(image_tag("ruby.jpeg", :size => "50x50", :border => 0), root_path) %></span>
-            Ruby Hack Night: Playing Hex
+            <span class="logo">
+              <%= link_to(image_tag("ruby.jpeg", :size => "50x50", :border => 0), root_path, :class => "btn btn-link") %>
+            </span>
+            Playing Hex
           </h1>
         </div>
-        <%= render 'debug-menu' %>
+        <%= render 'games/debug-menu' %>
+
+        <%= render :partial => "shared/flash_messages", :locals => {:flash => flash} %>
         <%= yield %>
       </div>
       <div class="span1"></div>
