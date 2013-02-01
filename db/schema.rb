@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130118055422) do
+ActiveRecord::Schema.define(:version => 20130131205140) do
 
   create_table "boards", :force => true do |t|
     t.datetime "created_at", :null => false
@@ -31,6 +31,8 @@ ActiveRecord::Schema.define(:version => 20130118055422) do
     t.integer  "move_time_limit"
     t.datetime "last_move_at"
     t.string   "win_state"
+    t.integer  "board_width"
+    t.integer  "board_height"
   end
 
   create_table "sessions", :force => true do |t|

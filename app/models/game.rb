@@ -1,19 +1,15 @@
 class Game < ActiveRecord::Base
-  def self.start(width, height)
-    Game.create do |game|
-      game.board_state = Hex::Board.create(width, height).state
-    end
+  def start()
+    self.board_state = Hex::Board.create(self.board_width, self.board_height).state
+
+    #@board = Hex::Board.new(board_state)
   end
 
-  def width
-    board.width
-  end
+  # def width
+  #   board.width
+  # end
 
-  def height
-    board.height
-  end
-
-  def board
-    Hex::Board.new(board_state)
-  end
+  # def height
+  #   board.height
+  # end
 end

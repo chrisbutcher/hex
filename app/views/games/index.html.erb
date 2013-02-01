@@ -5,6 +5,7 @@
 </p>
 
 <%= form_for(Game.new, remote: true) do |f| %>
+  <%= select_tag(:dimensions, options_for_select([['11x11', 11], ['13x13', 13], ['14x14', 14], ['19x19', 19]]), { :class => 'dimensions_dropdown' }) %>
   <%= f.submit "Create Game", :class => "btn" %>
 <% end %>
 
@@ -14,6 +15,7 @@
       <th>Game id</th>
       <th>Player 1</th>
       <th>Player 2</th>
+      <th>Dimensions</th>
       <th>Join</th>
       <th>Delete</th>
     </tr>
