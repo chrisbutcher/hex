@@ -17,6 +17,8 @@ class GamesController < ApplicationController
     @game.board_height = params[:dimensions]
     @game.start()
 
+    #logger.debug "Dimensions: #{params[:dimensions]}"
+
     respond_to do |format|
       if @game.save
         format.html  { redirect_to(@game,
@@ -53,5 +55,4 @@ class GamesController < ApplicationController
   def show
     @game = Game.find(params[:id])
   end
-
 end

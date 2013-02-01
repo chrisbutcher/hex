@@ -5,7 +5,7 @@ Hex::Application.routes.draw do
 
   root :to => 'games#index'
   # root :to => 'game#show', :dimensions => "11x11"
-  match 'games/show/:dimensions' => 'games#show', :as => 'show_game', :dimensions => "11x11"
+  match 'games/show/' => 'games#show', :as => 'show_game'
   match 'new', :to => 'games#new'
   match 'games/join/:id' => 'games#join', :as => 'join_game'
 
