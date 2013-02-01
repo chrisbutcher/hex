@@ -4,10 +4,10 @@
   <b>Game:</b>
 </p>
 
-<canvas id="hexmap" width="860" height="720"></canvas>
+<canvas id="hexmap" width="700" height="500"></canvas>
 
 <script>
-  initGame(<%= @game.getDimensions[0]  %>, <%= @game.getDimensions[1] %>);
+  initGame(<%= @game.width %>, <%= @game.height %>);
 </script>
 
 <% if false %>

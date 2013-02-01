@@ -1,32 +1,19 @@
 class Game < ActiveRecord::Base
-  attr_protected
-
-  # def initialize width=1, height=1, board=[]
-  #   @width = width
-  #   @height = height
-  #   @board = board
-  # end
-
-  # def self.create width, height
-  #   board_array = [[nil] * width] * height
-
-  #   @game = new(width, height, board_array)
-  # end
-
-  # def save session
-  #   session[:board] = @board
-  # end
-
-  def load session
-    @game = session[:board]
+  def self.start(width, height)
+    Game.create do |game|
+      game.board_state = Hex::Board.create(width, height).state
+    end
   end
 
-  def move x, y, color
-    @board[y][x] = color
+  def width
+    board.width
   end
 
-  def getDimensions
-    return @width, @height
+  def height
+    board.height
   end
 
+  def board
+    Hex::Board.new(board_state)
+  end
 end
