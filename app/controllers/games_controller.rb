@@ -30,7 +30,7 @@ class GamesController < ApplicationController
       if @game.save
         format.html  { redirect_to(@game,
                       :notice => 'Game was successfully created.') }
-        format.json  { render :json => @post,
+        format.json  { render :json => @game,
                       :status => :created, :location => @game }
       else
         format.html  { render :action => "new" }
@@ -49,7 +49,6 @@ class GamesController < ApplicationController
       format.html { redirect_to games_url }
       format.js
     end
-
   end
 
   def join

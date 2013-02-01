@@ -7,6 +7,7 @@ Hex::Application.routes.draw do
   # root :to => 'game#show', :dimensions => "11x11"
   match 'games/show/:dimensions' => 'games#show', :as => 'show_game', :dimensions => "11x11"
   match 'new', :to => 'games#new'
+  match 'games/join/:id' => 'games#join', :as => 'join_game'
 
   # The priority is based upon order of creation:
   # first created -> highest priority.
