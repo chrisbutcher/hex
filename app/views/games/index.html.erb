@@ -3,7 +3,6 @@
 <p id="game-top">
   <b>Games:</b>
 </p>
-
 <%= form_for(Game.new, remote: true) do |f| %>
   <%= select_tag(:dimensions, options_for_select([['11x11', 11], ['13x13', 13], ['14x14', 14], ['19x19', 19]]), { :class => 'dimensions_dropdown' }) %>
   <%= f.submit "Create Game", :class => "btn" %>

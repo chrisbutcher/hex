@@ -1,7 +1,7 @@
     <tr class="<%= dom_id(game) %>">
       <td><%= game.id %></td>
-      <td><%= game.horiz_user_id %></td>
-      <td><%= game.vert_user_id %></td>
+      <td><%= game.horiz_user ? game.horiz_user.name : "Open" %></td>
+      <td><%= game.vert_user ? game.vert_user.name : "Open" %></td>
       <td><%= game.board_width %>x<%= game.board_height %></td>
       <td><%= link_to "Join", join_game_path(game.id), dimensions: '11x11' %></td>
       <td><%= link_to "Delete", game, method: :delete, remote: true %></td>

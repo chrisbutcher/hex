@@ -15,6 +15,11 @@ class GamesController < ApplicationController
     @game = Game.new(params[:game])
     @game.board_width = params[:dimensions]
     @game.board_height = params[:dimensions]
+
+    user = current_user || User.new_guest
+    user.save if user.guest?
+
+    @game.horiz_user_id = user.id
     @game.start()
 
     #logger.debug "Dimensions: #{params[:dimensions]}"
