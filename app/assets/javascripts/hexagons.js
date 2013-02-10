@@ -1,4 +1,10 @@
-var initGame = function(boardWidth, boardHeight, cpuPlayerEnabled) {
+var localPlayersTurn; // TODO: Unsafe global variables
+var paper;
+var turnIndicator = null;
+
+var initGame = function(boardWidth, boardHeight, playerNumber) {
+  //alert('You are player #' + playerNumber);
+
   var canvas = document.getElementById('hexmap');
   
   if (canvas===null){
@@ -13,12 +19,15 @@ var initGame = function(boardWidth, boardHeight, cpuPlayerEnabled) {
   var tileRadius = Math.min(canvas.width / (Math.sqrt(3) * ((boardWidth+1) +(boardHeight+1)/2)),
                        canvas.height / (3 * (boardHeight+1) / 2));
 
-  var tileWidth = tileRadius * Math.sqrt(3);  
+  var tileWidth = tileRadius * Math.sqrt(3);
   var padding = tileWidth * 1.5;
 
-  var drawBackground = false;
-  var bluePlayersTurn = true;
-  var turnIndicator = null;
+  var drawBackground = false;  
+
+  if (playerNumber === 1)
+    localPlayersTurn = true;
+  else
+    localPlayersTurn = false;
 
   var gameWon = false;
 
@@ -50,33 +59,36 @@ var initGame = function(boardWidth, boardHeight, cpuPlayerEnabled) {
     var clickedX = tileClickedOn.hexX;
     var clickedY = tileClickedOn.hexY;
 
-    // Check if we've clicked on a Hex tile
-    if (tileClickedOn.hexItemType === 'hex'){
-      // Check if the Hex tile we clicked is blank
-      if (boardState[clickedX][clickedY] === 0){
-        if (bluePlayersTurn){
-          tileClickedOn.fillColor = 'blue';
-          boardState[clickedX][clickedY] = 1;
-          send_move(clickedX, clickedY, '1');
-        }
-        else {
-          tileClickedOn.fillColor = 'red';
-          boardState[clickedX][clickedY] = 2;
-          send_move(clickedX, clickedY, '2');
-        }
+    if (localPlayersTurn)
+    {
+      // Check if we've clicked on a Hex tile
+      if (tileClickedOn.hexItemType === 'hex'){
+        // Check if the Hex tile we clicked is blank
+        if (boardState[clickedX][clickedY] === 0){
+          if (playerNumber === 1){
+            tileClickedOn.fillColor = 'blue';
+            boardState[clickedX][clickedY] = 1;
+            send_move(clickedX, clickedY, '1');
+          }
+          else {
+            tileClickedOn.fillColor = 'red';
+            boardState[clickedX][clickedY] = 2;
+            send_move(clickedX, clickedY, '2');
+          }
 
-        if (bluePlayersTurn)
-          checkWin(1);
-        else{
-          if (!cpuPlayerEnabled)
-            checkWin(2);
+          if (localPlayersTurn)
+            checkWin(1);
+          else{
+            if (!cpuPlayerEnabled)
+              checkWin(2);
+          }
+
+          localPlayersTurn = !localPlayersTurn;
+          updateTurnIndicator();
+
+          if (cpuPlayerEnabled)
+            cpuPlayerTick();
         }
-
-        bluePlayersTurn = !bluePlayersTurn;
-        updateTurnIndicator();
-
-        if (cpuPlayerEnabled)
-          cpuPlayerTick();
       }
     }
   };
@@ -161,14 +173,6 @@ var initGame = function(boardWidth, boardHeight, cpuPlayerEnabled) {
 
   paper.view.draw();
 
-  function updateTurnIndicator() {
-    if (bluePlayersTurn) {
-      turnIndicator.content = "Blue's turn.";
-    } else {
-      turnIndicator.content = "Red's turn.";
-    }
-  }
-
   // For now, The CPU player simply picks a random free tile
   function cpuPlayerTick(){    
 
@@ -203,7 +207,7 @@ var initGame = function(boardWidth, boardHeight, cpuPlayerEnabled) {
     checkWin(2);
 
     // Change turns
-    bluePlayersTurn = true;
+    localPlayersTurn = true;
     updateTurnIndicator();
   }
 
@@ -224,11 +228,21 @@ var initGame = function(boardWidth, boardHeight, cpuPlayerEnabled) {
           gameWon = true;
 
           for (i = 0; i < result.length; i++)
-            hexTiles[result[i][0]][result[i][1]].fillColor = 'yellow';          
-
+            hexTiles[result[i][0]][result[i][1]].fillColor = 'yellow';
           return;
         }
       }
     }    
   }
+
+  whos_turn(playerNumber);
+
 }; // end of initGame()
+
+function updateTurnIndicator() {
+  if (localPlayersTurn) {
+    turnIndicator.content = "Your turn.";
+  } else {
+    turnIndicator.content = "Opponent's turn.";
+  }
+}
