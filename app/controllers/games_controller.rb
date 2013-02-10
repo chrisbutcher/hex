@@ -3,8 +3,11 @@ require 'pp'
 class GamesController < ApplicationController
 
   def move
-    @game = Game.load(session)
+    @game = Game.find(session[:game_id])
     @game.move(params[:x], params[:y], params[:color])
+    @game.save
+
+    render :text => "OK"
   end
 
   def index
@@ -52,6 +55,7 @@ class GamesController < ApplicationController
 
   def join
     @game = Game.find(params[:id])
+    session[:game_id] = @game.id
 
     respond_to do |format|
       format.html { redirect_to :action => "show", :id => @game.id }

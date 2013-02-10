@@ -14,6 +14,7 @@ Hex::Application.routes.draw do
   match 'games/show/' => 'games#show', :as => 'show_game'
   match 'new', :to => 'games#new'
   match 'games/join/:id' => 'games#join', :as => 'join_game'
+  match 'games/move' => 'games#move'
 
   # The priority is based upon order of creation:
   # first created -> highest priority.

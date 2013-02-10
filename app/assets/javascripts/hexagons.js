@@ -57,10 +57,12 @@ var initGame = function(boardWidth, boardHeight, cpuPlayerEnabled) {
         if (bluePlayersTurn){
           tileClickedOn.fillColor = 'blue';
           boardState[clickedX][clickedY] = 1;
+          send_move(clickedX, clickedY, '1');
         }
         else {
           tileClickedOn.fillColor = 'red';
           boardState[clickedX][clickedY] = 2;
+          send_move(clickedX, clickedY, '2');
         }
 
         if (bluePlayersTurn)
