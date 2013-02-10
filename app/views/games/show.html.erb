@@ -1,14 +1,25 @@
-<p id="notice"><%= notice %></p>
-
 <p id="game-top">
   <b>Game:</b>
 </p>
 
 <canvas id="hexmap" width="700" height="500"></canvas>
 
-<script>
-  initGame(<%= @game.board_width %>, <%= @game.board_height %>);
-</script>
+<% if current_user.id == @game.horiz_user_id %>
+	<% player = 1 %>
+<% elsif current_user.id == @game.vert_user_id %>
+	<% player = 2 %>
+<% end %>
+
+<% unless player.nil? %>
+	<script>
+		var csrf_token = $("meta[name='csrf-token']").attr("content");
+	  initGame(<%= @game.board_width %>, <%= @game.board_height %>, <%= player %>);
+	</script>
+<% else %>
+	Could not join game.
+<% end %>
+
+<%= session[:game_id] %>
 
 <% if false %>
   <%= link_to 'Edit', edit_session_path(@session) %> |

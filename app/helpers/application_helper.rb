@@ -5,7 +5,7 @@ module ApplicationHelper
       when :alert then "warning"
       when :notice then "info"
       when :error then "alert-error"
-      when :info then "alert-info"
+      #when :info then "alert-info"
       else
         type.to_s
     end
