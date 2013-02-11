@@ -19,7 +19,7 @@ ActiveRecord::Schema.define(:version => 20130201204302) do
     t.string   "password"
     t.string   "board_state"
     t.string   "move_list"
-    t.integer  "current_played_id"
+    t.integer  "current_player_id"
     t.integer  "horiz_user_id"
     t.integer  "vert_user_id"
     t.integer  "game_time_limit"

@@ -1,9 +1,12 @@
-var localPlayersTurn; // TODO: Unsafe global variables
+var localPlayersTurn; // TODO: These are unsafe global variables, for now!
 var paper;
 var turnIndicator = null;
 
-var initGame = function(boardWidth, boardHeight, playerNumber) {
-  //alert('You are player #' + playerNumber);
+var g_boardWidth, g_boardHeight;
+var hexTiles = [];
+
+var initGame = function(boardWidth, boardHeight, player_id, host_player_id) {
+  //alert('You are player #' + player_id);
 
   var canvas = document.getElementById('hexmap');
   
@@ -14,6 +17,10 @@ var initGame = function(boardWidth, boardHeight, playerNumber) {
 
   if(typeof(boardWidth)==='undefined') boardWidth = 11;
   if(typeof(boardHeight)==='undefined') boardHeight = 11;
+
+  g_boardWidth = boardWidth;
+  g_boardHeight = boardHeight;
+
   if(typeof(cpuPlayerEnabled)==='undefined') cpuPlayerEnabled = false;
 
   var tileRadius = Math.min(canvas.width / (Math.sqrt(3) * ((boardWidth+1) +(boardHeight+1)/2)),
@@ -24,7 +31,7 @@ var initGame = function(boardWidth, boardHeight, playerNumber) {
 
   var drawBackground = false;  
 
-  if (playerNumber === 1)
+  if (player_id === host_player_id)
     localPlayersTurn = true;
   else
     localPlayersTurn = false;
@@ -35,9 +42,7 @@ var initGame = function(boardWidth, boardHeight, playerNumber) {
   var mapsize_y = boardHeight;
   JsAStar.init(boardWidth, boardHeight);
 
-  var boardState = JsAStar.make2dArray(mapsize_x,mapsize_y, 0);
-
-  var hexTiles = []
+  var boardState = JsAStar.make2dArray(mapsize_x,mapsize_y, 0); 
 
   paper.setup(canvas);
 
@@ -65,7 +70,7 @@ var initGame = function(boardWidth, boardHeight, playerNumber) {
       if (tileClickedOn.hexItemType === 'hex'){
         // Check if the Hex tile we clicked is blank
         if (boardState[clickedX][clickedY] === 0){
-          if (playerNumber === 1){
+          if (player_id === host_player_id){
             tileClickedOn.fillColor = 'blue';
             boardState[clickedX][clickedY] = 1;
             send_move(clickedX, clickedY, '1');
@@ -235,7 +240,7 @@ var initGame = function(boardWidth, boardHeight, playerNumber) {
     }    
   }
 
-  whos_turn(playerNumber);
+  whos_turn(player_id);
 
 }; // end of initGame()
 
@@ -245,4 +250,19 @@ function updateTurnIndicator() {
   } else {
     turnIndicator.content = "Opponent's turn.";
   }
+}
+
+function updateBoard(boardString) {
+  for (var i = 0; i < g_boardWidth; i++) {
+    for (var j = 0; j < g_boardHeight; j++) {
+      position = (g_boardWidth + 1) * j + i;
+
+      if (boardString[position] === '1')
+        hexTiles[i][j].fillColor = 'blue';
+      else if (boardString[position] === '2')
+        hexTiles[i][j].fillColor = 'red';
+    }
+  }
+
+  paper.view.draw();
 }

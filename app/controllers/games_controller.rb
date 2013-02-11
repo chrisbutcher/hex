@@ -4,21 +4,25 @@ class GamesController < ApplicationController
 
   def update
     @game = Game.find(session[:game_id])
-    if @game.current_played_id == @game.horiz_user_id
-      render :text => "1" # Return who's turn it is to whos_turn() Ajax function
-    else
-      render :text => "2"
-    end
+
+    # if @game.current_player_id == @game.horiz_user_id
+    #   render :text => "1" # Return who's turn it is to whos_turn() Ajax function
+    # else
+    #   render :text => "2"
+    # end
+
+    render :json => @game
   end
 
   def move
     @game = Game.find(session[:game_id])
     @game.move(params[:x], params[:y], params[:color])
+    @game.last_move_at = DateTime.now
 
-    if @game.current_played_id == @game.horiz_user_id
-      @game.current_played_id = @game.vert_user_id
+    if @game.current_player_id == @game.horiz_user_id
+      @game.current_player_id = @game.vert_user_id
     else
-      @game.current_played_id = @game.horiz_user_id
+      @game.current_player_id = @game.horiz_user_id
     end
     @game.save
 
@@ -37,9 +41,9 @@ class GamesController < ApplicationController
     user = current_user || User.new_guest
     user.save if user.guest?
     session[:user_id] = user.id
-    
+
     @game.horiz_user_id = user.id
-    @game.current_played_id = user.id # Note typo in database migration
+    @game.current_player_id = user.id
     @game.start()
 
     #logger.debug "Dimensions: #{params[:dimensions]}"

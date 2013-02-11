@@ -11,8 +11,8 @@ function send_move(x, y, color){
         'y': y,
         'color': color
     },
-    success: function(msg){
-        //alert('Sent. Status: ' + msg);
+    success: function(response){
+        //alert('Sent. Status: ' + response);
     }});
 }
 
@@ -24,13 +24,15 @@ function whos_turn(playerNumber){
     data: { 
         'playerNumber': playerNumber
     },
-    success: function(msg){
-        //alert('Player turn = ' + msg);
-        if (msg === playerNumber.toString()){
+    success: function(response){
+        console.log('Player turn = ' + response['current_player_id'] + ' local player = ' + playerNumber.toString());
+        if (response['current_player_id'].toString() === playerNumber.toString()){
           if (localPlayersTurn === false){
             localPlayersTurn = !localPlayersTurn;
             updateTurnIndicator();
             paper.view.draw();
+
+            updateBoard(response['board_state']);
           }
         }
     },
